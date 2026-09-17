@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import {
   Activity,
   ArrowDown,
@@ -76,6 +77,17 @@ const researchCards = [
   [SlidersHorizontal, "Optimization", "Study robustness and parameter sensitivity."],
 ] as const;
 
+const introductionCards: ReadonlyArray<readonly [LucideIcon, string, string]> = [
+  [Microscope, "Quantitative Research", "Data-driven research and systematic strategy development."],
+  [BrainCircuit, "Intelligent Systems", "AI, machine learning and computational tools for market research."],
+  [ShieldCheck, "Risk Engineering", "Position sizing, exposure analysis, drawdown monitoring and disciplined system design."],
+];
+
+const aiMethods: ReadonlyArray<readonly [LucideIcon, string]> = [
+  [BrainCircuit, "Machine Learning"], [Braces, "Feature Engineering"], [Binary, "Classification"],
+  [TrendingUp, "Regression"], [Network, "Clustering"], [Target, "Pattern Research"],
+];
+
 const strategies = [
   ["Trend Following", "Directional", "H4 / Daily", "Volatility scaled", "Research"],
   ["Breakout", "Momentum", "H1 / H4", "ATR stop", "Simulation"],
@@ -97,6 +109,7 @@ function HomePage() {
   const [riskPercent, setRiskPercent] = useState(1);
   const [entry, setEntry] = useState(2000);
   const [stop, setStop] = useState(1980);
+  const selectedStrategy = strategies[strategy] ?? ["Trend Following", "Directional", "H4 / Daily", "Volatility scaled", "Research"];
 
   const risk = useMemo(() => {
     const amount = Math.max(0, balance * (riskPercent / 100));
@@ -142,11 +155,7 @@ function HomePage() {
         <section id="research" className="mx-auto max-w-[1440px] px-5 py-24 lg:px-10 lg:py-36">
           <SectionHeading index="01" eyebrow="Research mandate" title="Built Around Research. Driven by Data." copy="Modern markets generate enormous amounts of information. Param Trading Hub explores quantitative methods, computational systems and artificial intelligence to turn complex market information into structured research." />
           <div className="mt-16 grid gap-px overflow-hidden rounded-sm border border-border bg-border md:grid-cols-3">
-            {[
-              [Microscope, "Quantitative Research", "Data-driven research and systematic strategy development."],
-              [BrainCircuit, "Intelligent Systems", "AI, machine learning and computational tools for market research."],
-              [ShieldCheck, "Risk Engineering", "Position sizing, exposure analysis, drawdown monitoring and disciplined system design."],
-            ].map(([Icon, title, copy]) => <article key={String(title)} className="group bg-background p-8 transition-colors hover:bg-surface-raised lg:p-10"><Icon className="size-6 text-primary" strokeWidth={1.4} /><h3 className="mt-14 font-display text-xl">{String(title)}</h3><p className="mt-3 text-sm leading-7 text-muted-foreground">{String(copy)}</p><div className="mt-8 h-px w-8 bg-gold transition-all group-hover:w-16" /></article>)}
+            {introductionCards.map(([Icon, title, copy]) => <article key={title} className="group bg-background p-8 transition-colors hover:bg-surface-raised lg:p-10"><Icon className="size-6 text-primary" strokeWidth={1.4} /><h3 className="mt-14 font-display text-xl">{title}</h3><p className="mt-3 text-sm leading-7 text-muted-foreground">{copy}</p><div className="mt-8 h-px w-8 bg-gold transition-all group-hover:w-16" /></article>)}
           </div>
         </section>
 
@@ -167,8 +176,8 @@ function HomePage() {
             <div className="mt-14 grid gap-6 lg:grid-cols-[.78fr_1.22fr]">
               <div className="space-y-2">{strategies.map((s, i) => <button key={s[0]} onClick={() => setStrategy(i)} className={cn("flex w-full items-center justify-between rounded-sm border px-5 py-4 text-left transition-colors", i === strategy ? "border-primary/50 bg-primary/10 text-foreground" : "border-border bg-background text-muted-foreground hover:bg-accent")}><span className="text-sm font-medium">{s[0]}</span><ChevronRight className="size-4" /></button>)}</div>
               <article className="glass-panel rounded-sm p-6 lg:p-10">
-                <div className="flex items-center justify-between"><div><span className="font-mono text-[10px] uppercase text-primary">Selected research model</span><h3 className="mt-3 font-display text-3xl">{strategies[strategy][0]}</h3></div><Radar className="size-10 text-primary" strokeWidth={1} /></div>
-                <div className="my-10 grid grid-cols-2 gap-px bg-border sm:grid-cols-4">{["Strategy Type", "Timeframe", "Risk Model", "Research Status"].map((label, i) => <div key={label} className="bg-background p-4"><span className="font-mono text-[9px] uppercase text-muted-foreground">{label}</span><p className="mt-2 text-xs text-foreground">{strategies[strategy][i + 1]}</p></div>)}</div>
+                <div className="flex items-center justify-between"><div><span className="font-mono text-[10px] uppercase text-primary">Selected research model</span><h3 className="mt-3 font-display text-3xl">{selectedStrategy[0]}</h3></div><Radar className="size-10 text-primary" strokeWidth={1} /></div>
+                <div className="my-10 grid grid-cols-2 gap-px bg-border sm:grid-cols-4">{["Strategy Type", "Timeframe", "Risk Model", "Research Status"].map((label, i) => <div key={label} className="bg-background p-4"><span className="font-mono text-[9px] uppercase text-muted-foreground">{label}</span><p className="mt-2 text-xs text-foreground">{selectedStrategy[i + 1]}</p></div>)}</div>
                 <p className="max-w-xl text-sm leading-7 text-muted-foreground">A configurable research specification for hypothesis testing, robustness analysis and historical simulation. No live performance is represented.</p>
                 <Button className="mt-8" onClick={() => document.querySelector("#trading-lab")?.scrollIntoView()}>Analyze strategy <ArrowRight className="size-4" /></Button>
               </article>
@@ -208,7 +217,7 @@ function HomePage() {
         <section className="border-y border-border bg-surface py-24 lg:py-36">
           <div className="mx-auto grid max-w-[1440px] gap-14 px-5 lg:grid-cols-[1fr_1fr] lg:px-10">
             <div><Eyebrow>AI + Quantitative Methods</Eyebrow><h2 className="mt-6 max-w-3xl font-display text-4xl leading-tight lg:text-6xl">Artificial Intelligence Meets Quantitative Research</h2><p className="mt-8 max-w-lg text-lg text-muted-foreground">AI methods can organize information, identify relationships and support research—without implying certainty about future markets.</p><p className="mt-12 font-mono text-sm uppercase text-primary">Research. Test. Validate. Iterate.</p></div>
-            <div className="grid grid-cols-2 gap-px bg-border sm:grid-cols-3">{[[BrainCircuit,"Machine Learning"],[Braces,"Feature Engineering"],[Binary,"Classification"],[TrendingUp,"Regression"],[Network,"Clustering"],[Target,"Pattern Research"]].map(([Icon,x])=><div key={String(x)} className="bg-background p-5 lg:p-7"><Icon className="size-5 text-gold" strokeWidth={1.3}/><p className="mt-10 text-xs">{String(x)}</p></div>)}</div>
+            <div className="grid grid-cols-2 gap-px bg-border sm:grid-cols-3">{aiMethods.map(([Icon,x])=><div key={x} className="bg-background p-5 lg:p-7"><Icon className="size-5 text-gold" strokeWidth={1.3}/><p className="mt-10 text-xs">{x}</p></div>)}</div>
           </div>
         </section>
 
